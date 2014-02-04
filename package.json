@@ -29,6 +29,6 @@
     "co-mocha": "git://github.com/blakeembrey/co-mocha"
   },
   "dependencies": {
-    "retest": "0.0.2"
+    "retest": "0.x"
   }
 }
