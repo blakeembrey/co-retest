@@ -13,7 +13,7 @@ var thunkifyRequestMethod = function (fn) {
     var context = this;
 
     return function (done) {
-      // Concatinate the callback with the original arguments.
+      // Concatinate the callback manually to avoid array arguments from co.
       return fn.apply(context, args.concat(function (err, res) {
         done(err, res);
       }));
@@ -22,18 +22,25 @@ var thunkifyRequestMethod = function (fn) {
 };
 
 /**
- * Request methods.
+ * Thunkify a request function.
  *
- * @type {Array}
+ * @param  {Function} request
+ * @return {Function}
  */
-var methods = [
-  'get',
-  'patch',
-  'post',
-  'put',
-  'head',
-  'del'
-];
+var thunkifyRequest = function (request) {
+  var fn = thunkifyRequestMethod(request);
+
+  // Regular request methods that don't need be thunkified.
+  fn.jar    = request.jar;
+  fn.cookie = request.cookie;
+
+  // Attach all request methods.
+  ['get', 'patch', 'post', 'put', 'head', 'del'].forEach(function (method) {
+    fn[method] = thunkifyRequestMethod(request[method]);
+  });
+
+  return fn;
+};
 
 /**
  * Thunkify an instance of request.
@@ -42,18 +49,27 @@ var methods = [
  * @return {Function}
  */
 var thunkifyRetest = function (fn) {
-  return function (app, opts) {
-    var request = fn(app, opts);
+  return function (app) {
+    var request = fn(app);
+    var retest  = thunkifyRequest(request);
 
-    // Create the co-retest function.
-    var retest = thunkifyRequestMethod(request);
-    retest.jar    = request.jar;
-    retest.cookie = request.cookie;
+    /**
+     * Export the defaults method and return a thunkified request instance.
+     *
+     * @return {Function}
+     */
+    retest.defaults = function () {
+      return thunkifyRequest(request.defaults.apply(request, arguments));
+    };
 
-    // Wrap regular request methods.
-    methods.forEach(function (method) {
-      retest[method] = thunkifyRequestMethod(request[method]);
-    });
+    /**
+     * Export the forever agent method and return a thunkified request instance.
+     *
+     * @return {Function}
+     */
+    retest.forever = function () {
+      return thunkifyRequest(request.forever.apply(request, arguments));
+    };
 
     return retest;
   };
