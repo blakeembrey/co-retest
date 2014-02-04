@@ -7,18 +7,16 @@ var __slice = Array.prototype.slice;
  * @param  {Function} fn
  * @return {Function}
  */
-var thunkifyRequest = function (fn) {
+var thunkifyRequestMethod = function (fn) {
   return function () {
     var args    = __slice.call(arguments);
     var context = this;
 
     return function (done) {
-      // Push the callback manually to avoid additional arguments from co.
-      args.push(function (err, res) {
+      // Concatinate the callback with the original arguments.
+      return fn.apply(context, args.concat(function (err, res) {
         done(err, res);
-      });
-
-      return fn.apply(context, args);
+      }));
     };
   };
 };
@@ -48,13 +46,13 @@ var thunkifyRetest = function (fn) {
     var request = fn(app, opts);
 
     // Create the co-retest function.
-    var retest = thunkifyRequest(request);
+    var retest = thunkifyRequestMethod(request);
     retest.jar    = request.jar;
     retest.cookie = request.cookie;
 
     // Wrap regular request methods.
     methods.forEach(function (method) {
-      retest[method] = thunkifyRequest(request[method]);
+      retest[method] = thunkifyRequestMethod(request[method]);
     });
 
     return retest;

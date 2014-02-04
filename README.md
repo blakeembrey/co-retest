@@ -35,6 +35,8 @@ co(function* () {
 
 All API methods from [retest](https://github.com/blakeembrey/retest) work as usual, but every method returns a thunkified version of request for use with co.
 
+Please note: The thunkified function return can be called multiple times to get multiple results.
+
 ## License
 
 MIT

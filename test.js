@@ -17,6 +17,28 @@ describe('co-retest(app)', function () {
     assert.equal(res.body, 'hello');
     assert.equal(res.statusCode, 200);
   });
+
+  it('should not fail if reusing the same thunk', function* () {
+    var app = express();
+
+    app.get('/', function (req, res) {
+      res.send('hello');
+    });
+
+    var req = retest(app).get('/');
+
+    // Yield the first request.
+    var res1 = yield req;
+    var res2 = yield req;
+    var res3 = yield req;
+
+    assert.equal(res1.body, 'hello');
+    assert.equal(res2.body, 'hello');
+    assert.equal(res3.body, 'hello');
+    assert.equal(res1.statusCode, 200);
+    assert.equal(res2.statusCode, 200);
+    assert.equal(res3.statusCode, 200);
+  });
 });
 
 describe('retest.agent(app)', function () {
