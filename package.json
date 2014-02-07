@@ -26,7 +26,7 @@
     "mocha": "~1.17.1",
     "istanbul": "git://github.com/gotwarlost/istanbul#harmony",
     "express": "~3.4.8",
-    "co-mocha": "git://github.com/blakeembrey/co-mocha"
+    "co-mocha": "0.0.1"
   },
   "dependencies": {
     "retest": "0.x"
