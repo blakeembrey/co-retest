@@ -1,6 +1,6 @@
 {
   "name": "co-retest",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Wrapper for the retest library for co-like interfaces (generators)",
   "main": "co-retest.js",
   "scripts": {
