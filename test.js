@@ -44,7 +44,7 @@ describe('co-retest(app)', function () {
 describe('retest.agent(app)', function () {
   var app = express();
 
-  app.use(express.cookieParser());
+  app.use(require('cookie-parser')());
 
   app.get('/', function (req, res) {
     res.cookie('cookie', 'hello');
