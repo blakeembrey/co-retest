@@ -1,6 +1,11 @@
-# co-retest
+# Co Retest
 
-Simple wrapper for the [retest library](https://github.com/blakeembrey/retest) for co-like interfaces (node.js generators).
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Gittip][gittip-image]][gittip-url]
+
+Simple wrapper for the [retest library](https://github.com/blakeembrey/retest) for co-like interfaces (node.js generators) using thunks.
 
 Currently you must use the `--harmony-generators` flag when running node 0.11.x to get access to generators.
 
@@ -33,10 +38,19 @@ co(function* () {
 })();
 ```
 
-All API methods from [retest](https://github.com/blakeembrey/retest) work as usual, but every method returns a thunkified version of request for use with co.
+All API methods from [retest](https://github.com/blakeembrey/retest) work as usual, but every method returns a thunkified version of request for use with `co`.
 
-Please note: The thunkified function return can be called multiple times to get multiple results.
+**Please note:** The thunkified function return can be called multiple times to get multiple results.
 
 ## License
 
 MIT
+
+[npm-image]: https://img.shields.io/npm/v/co-retest.svg?style=flat
+[npm-url]: https://npmjs.org/package/co-retest
+[travis-image]: https://img.shields.io/travis/blakeembrey/co-retest.svg?style=flat
+[travis-url]: https://travis-ci.org/blakeembrey/co-retest
+[coveralls-image]: https://img.shields.io/coveralls/blakeembrey/co-retest.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/blakeembrey/co-retest?branch=master
+[gittip-image]: https://img.shields.io/gittip/blakeembrey.svg?style=flat
+[gittip-url]: https://www.gittip.com/blakeembrey
